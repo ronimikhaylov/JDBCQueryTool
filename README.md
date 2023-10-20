@@ -33,7 +33,7 @@ The SQL Interactive Query Tool is an intuitive Java-based application designed f
 
 1. Clone this repository to your local machine.
    ```
-   git clone <REPO_LINK>
+   git clone (https://github.com/ronimikhaylov/JDBCQueryTool.git)
    ```
 
 
