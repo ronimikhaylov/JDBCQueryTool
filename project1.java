@@ -19,9 +19,10 @@ public class project1 {
     }
 
     // List of all queries, databases and descriptions
+    
     static final QueryData[] QUERIES = {
 
-            new QueryData("Northwinds2022TSQLV7",
+            new QueryData("Northwinds2022TSQLV7",//
                     "WITH DiscontinuedTopProducts AS (\n" + //
                             "    SELECT TOP 5 p.ProductID, p.ProductName, SUM(d.Quantity) AS TotalQuantityOrdered \n" + //
                             "    FROM Production.Product p JOIN Sales.OrderDetail d ON p.ProductID = d.ProductID \n" + //
@@ -176,52 +177,52 @@ public class project1 {
 
             // Display queries related to the chosen database
             String[] descriptions = java.util.Arrays.stream(QUERIES)
-                    .filter(q -> q.databaseName.equals(selectedDb))
-                    .map(q -> q.description)
-                    .toArray(String[]::new);
-            String selectedDescription = (String) JOptionPane.showInputDialog(null, "Choose a query", "Query Selection",
-                    JOptionPane.QUESTION_MESSAGE, null, descriptions, descriptions[0]);
+                    .filter(q -> q.databaseName.equals(selectedDb)) // Filter queries by database q->q.databaseName.equals(selectedDb) means q is a QueryData object and q.databaseName is the databaseName field of that object
+                    .map(q -> q.description) // .map(q -> q.description) // Map the filtered queries to their descriptions
+                    .toArray(String[]::new);// .toArray(String[]::new); // Convert the mapped descriptions to an array of strings
+            String selectedDescription = (String) JOptionPane.showInputDialog(null, "Choose a query", "Query Selection",  // Prompt user for query selection
+                    JOptionPane.QUESTION_MESSAGE, null, descriptions, descriptions[0]); // Display the descriptions in a dropdown
 
-            // Fetch the selected query
-            String selectedQuery = java.util.Arrays.stream(QUERIES)
-                    .filter(q -> q.description.equals(selectedDescription))
-                    .findFirst()
-                    .get().query;
+            // Fetch the selected query 
+            String selectedQuery = java.util.Arrays.stream(QUERIES) // Filter queries by description
+                    .filter(q -> q.description.equals(selectedDescription))// .filter(q -> q.description.equals(selectedDescription)) // q->q.description.equals(selectedDescription) means q is a QueryData object and q.description is the description field of that object
+                    .findFirst() // .findFirst() // Get the first query that matches the description
+                    .get().query; // .get().query; // Get the query field of the query data object
 
             // Connection string
-            String connectionString = "jdbc:sqlserver://localhost:13001;databaseName=" + selectedDb
-                    + ";user=sa;password=PH@123456789;encrypt=true;trustServerCertificate=true";
+            String connectionString = "jdbc:sqlserver://localhost:13001;databaseName=" + selectedDb // Parameterize database name in URL
+                    + ";user=sa;password=PH@123456789;encrypt=true;trustServerCertificate=true"; 
 
-            try (Connection conn = DriverManager.getConnection(connectionString)) {
-                StringBuilder jsonOutput = new StringBuilder("[\n");
-                if (selectedQuery.contains("GO")) {
-                    String[] commands = selectedQuery.split("\\bGO\\b", -1);
-                    for (String command : commands) {
-                        if (command != null && !command.trim().isEmpty()) {
-                            executeAndAppendToJson(command.trim(), conn, jsonOutput);
-                        }
-                    }
+            try (Connection conn = DriverManager.getConnection(connectionString)) { // Establish connection to the database using the connection string
+                StringBuilder jsonOutput = new StringBuilder("[\n"); // Initialize a string builder to hold the output
+                if (selectedQuery.contains("GO")) { // If the query contains the word "GO", split the query by "GO" and execute each part separately
+                    String[] commands = selectedQuery.split("\\bGO\\b", -1);  // Split the query by "GO"
+                    for (String command : commands) { // Execute each part separately
+                        if (command != null && !command.trim().isEmpty()) { // If the command is not null or empty, execute it
+                            executeAndAppendToJson(command.trim(), conn, jsonOutput); // Execute the command and append the results to the output
+                        } // If the command is null or empty, do nothing
+                    } 
                 } else {
-                    executeAndAppendToJson(selectedQuery, conn, jsonOutput);
+                    executeAndAppendToJson(selectedQuery, conn, jsonOutput); // If the query does not contain the word "GO", execute it and append the results to the output
                 }
 
-                jsonOutput.append("]\n");
+                jsonOutput.append("]\n"); // Close the output
 
                 // Display results in a scrollable pane
-                JTextArea textArea = new JTextArea(20, 50);
-                textArea.setText(jsonOutput.toString());
-                textArea.setWrapStyleWord(true);
-                textArea.setLineWrap(true);
-                textArea.setCaretPosition(0);
-                textArea.setEditable(false);
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                JOptionPane.showMessageDialog(null, scrollPane, "Query Results", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Error executing the query: " + e.getMessage());
+                JTextArea textArea = new JTextArea(20, 50); // Initialize a text area to display the output
+                textArea.setText(jsonOutput.toString()); // Set the text of the text area to the output
+                textArea.setWrapStyleWord(true); // Set the text area to wrap words
+                textArea.setLineWrap(true); // Set the text area to wrap lines
+                textArea.setCaretPosition(0); // Set the caret position to the beginning of the text area. Caret is the blinking cursor
+                textArea.setEditable(false); // Set the text area to be non-editable 
+                JScrollPane scrollPane = new JScrollPane(textArea);     // Initialize a scroll pane to display the text area
+                JOptionPane.showMessageDialog(null, scrollPane, "Query Results", JOptionPane.INFORMATION_MESSAGE); // Display the scroll pane in a dialog box
+            } catch (SQLException e) { // Catch any SQL exceptions
+                JOptionPane.showMessageDialog(null, "Error executing the query: " + e.getMessage()); // Display the error message in a dialog box 
             }
 
             // Prompt user to play again
-            int playagain = JOptionPane.showConfirmDialog(null, "Would you like to play again?", "Play Again?",
+            int playagain = JOptionPane.showConfirmDialog(null, "Would you like to play again?", "Play Again?", // Prompt user to play again
                     JOptionPane.YES_NO_OPTION);
             if (playagain == JOptionPane.NO_OPTION) {
                 pl = false;
