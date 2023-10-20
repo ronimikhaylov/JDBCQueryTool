@@ -17,7 +17,7 @@ The SQL Interactive Query Tool is an intuitive Java-based application designed f
 
 ## Demonstration
 
-[Click here to watch the video demonstration.](URL_PLACEHOLDER)
+https://github.com/ronimikhaylov/JDBCQueryTool/assets/105238029/2fc60c4b-a691-44ab-adbf-341cf3bb6935
 
 
 
@@ -25,7 +25,7 @@ The SQL Interactive Query Tool is an intuitive Java-based application designed f
 
 ### Prerequisites
 
-- Java JDK .
+- Java JDK 17.0.4
 - JDBC driver for SQL Server (`mssql-jdbc-12.4.1.jre11.jar` or similar).
 - Access to a SQL Server instance.
 
