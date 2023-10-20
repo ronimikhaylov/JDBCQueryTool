@@ -63,5 +63,3 @@ While this project is primarily for personal use, contributions or suggestions a
 This project is licensed under the MIT License.
 
 ---
-
-Make sure to replace placeholders like `[REPO_LINK]` and `URL_PLACEHOLDER` with the actual links when you are ready.
